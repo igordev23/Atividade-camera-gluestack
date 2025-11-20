@@ -96,4 +96,17 @@ Uma terceira tela chamada **PhotoDetailScreen** pode ser implementada para exibi
 ### **Passos**
 1. Clone o repositório:
    ```bash
-   git clone <URL_DO_REPOSITORIO>
+   git clone <https://github.com/igordev23/Atividade-camera-gluestack.git>
+```
+2. Navegue até o diretório do projeto:
+   ```bash
+   cd nome-do-projeto
+   ```
+3. Instale as dependências:
+   ```bash
+   npm install
+   ```
+4. Inicie o aplicativo:
+   ```bash
+   npx expo start
+   ```
