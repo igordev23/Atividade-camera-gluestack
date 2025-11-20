@@ -96,7 +96,7 @@ Uma terceira tela chamada **PhotoDetailScreen** pode ser implementada para exibi
 ### **Passos**
 1. Clone o repositório:
    ```bash
-   git clone <https://github.com/igordev23/Atividade-camera-gluestack.git>
+   git clone https://github.com/igordev23/Atividade-camera-gluestack.git
 ```
 2. Navegue até o diretório do projeto:
    ```bash
