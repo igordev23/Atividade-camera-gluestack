@@ -12,7 +12,7 @@ Além disso, o app foi dividido em telas independentes e toda a interface foi re
 ## 🗂 Estrutura do Projeto
 
 O projeto segue boas práticas de separação de responsabilidades:
-
+```bash
 src/
 ├── model/
 │ └── MyPhoto.ts
@@ -28,7 +28,7 @@ src/
 │
 └── components/
 └── (componentes reutilizáveis)
-
+```
 
 ---
 
