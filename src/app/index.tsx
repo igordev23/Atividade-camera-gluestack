@@ -4,9 +4,11 @@ import { useEffect } from "react";
 import { useRouter } from "expo-router";
 
 import { Box } from "@/components/ui/box";
-import { Text } from '@/components/ui/text';
+import { Text } from "@/components/ui/text";
 import { Pressable } from "@/components/ui/pressable";
 import { HStack } from "@/components/ui/hstack";
+
+import { Camera, RefreshCcw, Image as ImageIcon } from "lucide-react-native";
 
 export default function Home() {
   const router = useRouter();
@@ -26,7 +28,7 @@ export default function Home() {
 
         <Pressable
           onPress={vm.requestCameraPermission}
-          className="px-4 py-3 bg-primary-500 rounded-lg"
+          className="px-6 py-3 bg-primary-500 rounded-xl shadow-lg"
         >
           <Text className="text-white font-bold">Permitir</Text>
         </Pressable>
@@ -35,46 +37,79 @@ export default function Home() {
   }
 
   return (
-    <Box className="flex-1">
+    <Box className="flex-1 bg-black">
       <CameraView
         ref={vm.cameraRef}
         style={{ flex: 1 }}
         facing={vm.facing}
       />
 
-      {/* BOTÕES — padrões gluestack UI */}
-      <HStack
-        className="
-          absolute bottom-0 
-          w-full 
-          justify-around 
-          px-6 pb-10 
-          bg-black/20
-        "
-      >
-        <Pressable
-          onPress={vm.toggleFacing}
-          className="px-5 py-3 bg-primary-500 rounded-xl"
-        >
-          <Text className="text-white font-semibold">Flip</Text>
-        </Pressable>
+      {/* NOVA ÁREA DE BOTÕES — estilo moderno */}
+      <Box
+  className="
+    absolute bottom-0 w-full 
+    bg-black/30 
+    flex justify-center items-center
+    pb-12 pt-8
+  "
+  style={{ height: 160 }}   // ← AUMENTA A ALTURA DA BARRA
+>
+  <HStack
+    space="xl"
+    className="w-full justify-center items-center"
+  >
+    {/* BOTÃO FLIP */}
+    <Pressable
+      onPress={vm.toggleFacing}
+      className="
+        w-16 h-16 
+        bg-white/15 
+        rounded-full 
+        justify-center items-center 
+        shadow-lg 
+        backdrop-blur-md
+      "
+    >
+      <RefreshCcw color="white" size={32} />
+    </Pressable>
 
-        <Pressable
-          onPress={vm.takePhoto}
-          className="px-5 py-3 bg-primary-500 rounded-xl"
-        >
-          <Text className="text-white font-semibold">
-            {vm.loading ? "Carregando..." : "Tirar Foto"}
-          </Text>
-        </Pressable>
+    {/* BOTÃO PRINCIPAL DE FOTO */}
+    <Pressable
+      onPress={vm.takePhoto}
+      className="
+        w-24 h-24 
+        bg-white 
+        rounded-full 
+        border-[6px] border-gray-300 
+        justify-center items-center 
+        shadow-2xl
+        active:scale-95
+      "
+    >
+      {vm.loading ? (
+        <Text className="text-gray-800 font-bold text-lg">...</Text>
+      ) : (
+        <Camera color="#111" size={36} />
+      )}
+    </Pressable>
 
-        <Pressable
-          onPress={() => router.replace("/galery")}
-          className="px-5 py-3 bg-slate-700 rounded-xl"
-        >
-          <Text className="text-white font-semibold">Galeria</Text>
-        </Pressable>
-      </HStack>
+    {/* BOTÃO GALERIA */}
+    <Pressable
+      onPress={() => router.replace("/galery")}
+      className="
+        w-16 h-16 
+        bg-white/15 
+        rounded-full 
+        justify-center items-center 
+        shadow-lg 
+        backdrop-blur-md
+      "
+    >
+      <ImageIcon color="white" size={32} />
+    </Pressable>
+  </HStack>
+</Box>
+
     </Box>
   );
 }

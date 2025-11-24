@@ -46,47 +46,70 @@ export default function GaleryScreen() {
                   Excluir
                 </Text>
               </Pressable>
+
+             
+
             </Box>
           </Pressable>
         ))}
       </Box>
 
-      {/* MODAL DE DETALHE */}
-      <Modal visible={!!vm.selectedPhoto} transparent animationType="fade">
-        <Box className="flex-1 bg-black/70 justify-center items-center">
-          {vm.selectedPhoto && (
-            <Box className="bg-[#111] p-5 rounded-xl w-[85%]">
+     {/* MODAL DE DETALHES */}
+<Modal visible={!!vm.selectedPhoto} transparent animationType="fade">
+  <Box className="flex-1 bg-black/70 justify-center items-center">
 
-              <Image
-                source={{ uri: vm.selectedPhoto.uri }}
-                alt="selected-photo"
-                className="w-full h-[250px] rounded-xl"
-                resizeMode="contain"
-              />
+    {vm.selectedPhoto && (
+      <Box className="bg-[#111] p-5 rounded-xl w-[90%]">
 
-              <Text className="text-white mt-4 text-base">
-                📅 {formatDate(vm.selectedPhoto.timestamp)}
-              </Text>
+        {/* FOTO */}
+        <Image
+          source={{ uri: vm.selectedPhoto.uri }}
+          alt="selected-photo"
+          className="w-full h-[250px] rounded-xl"
+          resizeMode="cover"
+        />
 
-              <Text className="text-white mt-2">
-                📍 Latitude: {vm.selectedPhoto.latitude ?? "N/A"}
-              </Text>
+        {/* DATA E HORA */}
+        <Text className="text-white mt-4 text-base font-semibold">
+          📅 {formatDate(vm.selectedPhoto.timestamp)}
+        </Text>
 
-              <Text className="text-white mb-2">
-                📍 Longitude: {vm.selectedPhoto.longitude ?? "N/A"}
-              </Text>
+       
 
-              <Pressable
-                onPress={vm.closePhoto}
-                className="bg-red-600 mt-4 py-3 rounded-lg items-center"
-              >
-                <Text className="text-white font-bold">Fechar</Text>
-              </Pressable>
+        {/* BOTÃO DETALHES - TIPADO E SEM ERROS */}
+        <Pressable
+          onPress={() => {
+            if (!vm.selectedPhoto) return;
 
-            </Box>
-          )}
-        </Box>
-      </Modal>
+            router.replace({
+              pathname: "/photoDetail",
+              params: {
+                uri: vm.selectedPhoto.uri,
+                latitude: String(vm.selectedPhoto.latitude ?? ""),
+                longitude: String(vm.selectedPhoto.longitude ?? ""),
+                timestamp: String(vm.selectedPhoto.timestamp),
+              },
+            });
+          }}
+          className="bg-blue-600 mt-4 py-2 rounded-lg items-center"
+        >
+          <Text className="text-white font-bold">Detalhes</Text>
+        </Pressable>
+
+        {/* FECHAR */}
+        <Pressable
+          onPress={vm.closePhoto}
+          className="bg-red-600 mt-4 py-3 rounded-lg items-center"
+        >
+          <Text className="text-white font-bold">Fechar</Text>
+        </Pressable>
+
+      </Box>
+    )}
+
+  </Box>
+</Modal>
+
     </Box>
   );
 }
