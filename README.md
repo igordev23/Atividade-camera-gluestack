@@ -1,16 +1,33 @@
-# Aplicativo de Câmera com Arquitetura MVVM
+# 📸 Aplicativo de Câmera com Arquitetura MVVM
 
-## Disciplina
+## 📘 Disciplina
 **Programação para Dispositivos Móveis (PDM)**
 
-## Objetivo Geral
-Este projeto tem como objetivo refatorar um aplicativo de câmera desenvolvido anteriormente, transformando-o em um projeto estruturado segundo a arquitetura MVVM (Model-View-ViewModel). Além disso, o aplicativo foi reorganizado em duas telas distintas e sua interface foi reescrita utilizando a biblioteca **react-native-gluestack**.
+## 🎯 Objetivo Geral
+Este projeto tem como objetivo refatorar um aplicativo de câmera desenvolvido anteriormente, reorganizando-o segundo a arquitetura **MVVM (Model-View-ViewModel)**.  
+Além disso, o app foi dividido em telas independentes e toda a interface foi reconstruída usando a biblioteca **Gluestack UI**.
 
 ---
 
-## Estrutura do Projeto
+## 🗂 Estrutura do Projeto
 
-O projeto foi organizado em pastas para garantir a separação de responsabilidades e facilitar a manutenção. A estrutura é a seguinte:
+O projeto segue boas práticas de separação de responsabilidades:
+
+src/
+├── model/
+│ └── MyPhoto.ts
+│
+├── viewmodel/
+│ ├── UseIndexViewModel.ts
+│ └── GaleryViewModel.ts
+│
+├── app/
+│ ├── index.tsx (Tela da Câmera)
+│ ├── galery.tsx (Tela da Galeria)
+│ ├── photoDetail.tsx (Tela de Detalhes da Foto)
+│
+└── components/
+└── (componentes reutilizáveis)
 
 
 ---
@@ -20,31 +37,33 @@ O projeto foi organizado em pastas para garantir a separação de responsabilida
 O projeto foi reorganizado para seguir a arquitetura MVVM, garantindo uma separação clara entre responsabilidades:
 
 ### **Model**
-- **MyPhoto.ts**: Define a estrutura de dados para fotos capturadas, incluindo URI, latitude, longitude e timestamp.
-- Outras estruturas necessárias ao estado da aplicação.
+- `MyPhoto.ts` define a estrutura das fotos: URI, latitude, longitude e timestamp.
 
 ### **ViewModel**
-- **UseIndexViewModel.ts**:
-  - Gerencia o estado da câmera (ex.: tipo front/back).
-  - Lida com permissões de câmera e localização.
-  - Implementa a lógica de captura de fotos e armazenamento de localização.
-- **GaleyViewModel.ts**:
-  - Gerencia a lista reativa de fotos capturadas.
-  - Implementa funções para adicionar e excluir fotos.
-
-A ViewModel expõe dados e funções puramente através de estados e métodos, sem lógica visual.
+- `UseIndexViewModel.ts`
+  - Gerencia estado da câmera (frontal/traseira)
+  - Lida com permissões (câmera e localização)
+  - Captura fotos e salva localização
+- `GaleryViewModel.ts`
+  - Gerencia lista de fotos
+  - Funções para adicionar/excluir fotos
+  - Ordenação por data
 
 ### **View**
-- **index.tsx**:
-  - Tela de pré-visualização da câmera.
-  - Exibe o componente de câmera.
-  - Permite alternar entre câmera frontal e traseira.
-  - Botão para capturar fotos.
-- **galery.tsx**:
-  - Tela de lista de fotos com localização.
-  - Exibe miniaturas das fotos capturadas.
-  - Mostra latitude e longitude quando disponíveis.
-  - Ordena por data de captura.
+- `index.tsx`
+  - Exibição da câmera
+  - Botões de trocar câmera e tirar foto
+- `galery.tsx`
+  - Lista de fotos
+  - Localização (lat/long)
+  - Ordenação por data
+- `photoDetail.tsx`
+  - Foto grande
+  - Mapa com localização (react-native-maps)
+  - Informações adicionais
+
+---
+
 
 Os componentes visuais recebem tudo via props, sem regras de negócio. Estados locais são usados apenas para UI.
 
@@ -62,26 +81,30 @@ A interface final é limpa, organizada, responsiva e fiel aos princípios de UI 
 
 ---
 
-## Funcionalidades Implementadas
+## 📱 Funcionalidades Implementadas
 
-### **Tela de Pré-visualização da Câmera**
-- Exibe o componente de câmera.
-- Permite alternar entre câmera frontal e traseira.
-- Botão para capturar fotos.
+### **Tela da Câmera**
+- Visualização em tempo real
+- Trocar câmera frontal/traseira
+- Capturar fotos
+- Salvar foto com dados de localização
 
-### **Tela de Lista de Fotos com Localização**
-- Exibe miniaturas das fotos capturadas.
-- Mostra latitude e longitude quando disponíveis.
-- Ordena por data de captura.
+### **Tela da Galeria**
+- Lista de fotos com miniaturas
+- Exibe latitude/longitude
+- Ordenação por data
+- Toque para ver detalhes
 
-### **Navegação**
-- Navegação entre as telas implementada com **expo-router**.
+### **Tela Extra — Detalhes**
+- Foto ampliada
+- Mapa com marcador (react-native-maps)
+- Data e coordenadas
+- Botão para voltar
 
 ---
-
 ## Desafio Extra (Opcional)
 
-A terceira tela chamada **PhotoDetailScreen** foi implementada com sucesso. Ela exibe:
+A terceira tela chamada **PhotoDetail** foi implementada com sucesso. Ela exibe:
 - A foto em tamanho grande.
 - Um mapa com marcador indicando a localização onde a foto foi tirada (se disponível).
 
