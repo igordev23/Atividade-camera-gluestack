@@ -4,7 +4,22 @@ import { useState, useRef } from "react";
 import { MyPhoto } from "../model/entities/MyPhoto";
 import { photoRepository } from "../model/repositories/PhotoRepository";
 
-export function useIndexViewModel() {
+type IndexState = {
+    facing: CameraType;
+    loading: boolean;
+    cameraRef: React.RefObject<CameraView|null>;
+    cameraPermission: boolean;
+    locationPermission: boolean;
+}
+
+type IndexActions = {
+    toggleFacing: () => void;
+    takePhoto: () => void;
+    requestCameraPermission: () => Promise<void>;
+    requestLocationPermission: () => Promise<void>;
+}
+
+export function useIndexViewModel(): IndexState & IndexActions {
     const [facing, setFacing] = useState<CameraType>("back");
     const [loading, setLoading] = useState(false);
 

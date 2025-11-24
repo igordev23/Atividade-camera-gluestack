@@ -6,11 +6,13 @@ import { Box } from "@/components/ui/box";
 import { Text } from "@/components/ui/text";
 import { Pressable } from "@/components/ui/pressable";
 import { Image } from "@/components/ui/image";
-import { HStack } from "@/components/ui/hstack";
 
 export default function GaleryScreen() {
   const router = useRouter();
-  const vm = useGaleryViewModel();
+  const {
+    state: { photos, selectedPhoto, isLoading, error },
+    actions: { fetchPhotos, deletePhoto, openPhoto, closePhoto },
+  } = useGaleryViewModel();
 
   const formatDate = (timestamp: number) => {
     const date = new Date(timestamp);
@@ -30,10 +32,28 @@ export default function GaleryScreen() {
         <Text className="text-white text-lg">⬅ Voltar</Text>
       </Pressable>
 
+      {/* BOTÃO PARA ATUALIZAR FOTOS */}
+      <Pressable
+        onPress={fetchPhotos}
+        className="bg-blue-600 mx-4 my-2 py-2 rounded-lg items-center"
+      >
+        <Text className="text-white font-bold">Atualizar Fotos</Text>
+      </Pressable>
+
+      {/* ERRO */}
+      {error && (
+        <Text className="text-red-500 text-center mt-2">{error}</Text>
+      )}
+
+      {/* LOADING */}
+      {isLoading && (
+        <Text className="text-white text-center mt-2">Carregando...</Text>
+      )}
+
       {/* GRID DE FOTOS */}
       <Box className="flex-row flex-wrap justify-center">
-        {vm.photos.map((item) => (
-          <Pressable key={item.uri} onPress={() => vm.openPhoto(item)}>
+        {photos.map((item) => (
+          <Pressable key={item.uri} onPress={() => openPhoto(item)}>
             <Box className="m-1">
               <Image
                 source={{ uri: item.uri }}
@@ -41,75 +61,65 @@ export default function GaleryScreen() {
                 className="w-[120px] h-[120px] rounded-lg"
               />
 
-              <Pressable onPress={() => vm.deletePhoto(item.uri)}>
+              <Pressable onPress={() => deletePhoto(item.uri)}>
                 <Text className="text-red-500 text-center mt-1 font-semibold">
                   Excluir
                 </Text>
               </Pressable>
-
-             
-
             </Box>
           </Pressable>
         ))}
       </Box>
 
-     {/* MODAL DE DETALHES */}
-<Modal visible={!!vm.selectedPhoto} transparent animationType="fade">
-  <Box className="flex-1 bg-black/70 justify-center items-center">
+      {/* MODAL DE DETALHES */}
+      <Modal visible={!!selectedPhoto} transparent animationType="fade">
+        <Box className="flex-1 bg-black/70 justify-center items-center">
+          {selectedPhoto && (
+            <Box className="bg-[#111] p-5 rounded-xl w-[90%]">
+              {/* FOTO */}
+              <Image
+                source={{ uri: selectedPhoto.uri }}
+                alt="selected-photo"
+                className="w-full h-[250px] rounded-xl"
+                resizeMode="cover"
+              />
 
-    {vm.selectedPhoto && (
-      <Box className="bg-[#111] p-5 rounded-xl w-[90%]">
+              {/* DATA E HORA */}
+              <Text className="text-white mt-4 text-base font-semibold">
+                📅 {formatDate(selectedPhoto.timestamp)}
+              </Text>
 
-        {/* FOTO */}
-        <Image
-          source={{ uri: vm.selectedPhoto.uri }}
-          alt="selected-photo"
-          className="w-full h-[250px] rounded-xl"
-          resizeMode="cover"
-        />
+              {/* BOTÃO DETALHES */}
+              <Pressable
+                onPress={() => {
+                  if (!selectedPhoto) return;
 
-        {/* DATA E HORA */}
-        <Text className="text-white mt-4 text-base font-semibold">
-          📅 {formatDate(vm.selectedPhoto.timestamp)}
-        </Text>
+                  router.replace({
+                    pathname: "/photoDetail",
+                    params: {
+                      uri: selectedPhoto.uri,
+                      latitude: String(selectedPhoto.latitude ?? ""),
+                      longitude: String(selectedPhoto.longitude ?? ""),
+                      timestamp: String(selectedPhoto.timestamp),
+                    },
+                  });
+                }}
+                className="bg-blue-600 mt-4 py-2 rounded-lg items-center"
+              >
+                <Text className="text-white font-bold">Detalhes</Text>
+              </Pressable>
 
-       
-
-        {/* BOTÃO DETALHES - TIPADO E SEM ERROS */}
-        <Pressable
-          onPress={() => {
-            if (!vm.selectedPhoto) return;
-
-            router.replace({
-              pathname: "/photoDetail",
-              params: {
-                uri: vm.selectedPhoto.uri,
-                latitude: String(vm.selectedPhoto.latitude ?? ""),
-                longitude: String(vm.selectedPhoto.longitude ?? ""),
-                timestamp: String(vm.selectedPhoto.timestamp),
-              },
-            });
-          }}
-          className="bg-blue-600 mt-4 py-2 rounded-lg items-center"
-        >
-          <Text className="text-white font-bold">Detalhes</Text>
-        </Pressable>
-
-        {/* FECHAR */}
-        <Pressable
-          onPress={vm.closePhoto}
-          className="bg-red-600 mt-4 py-3 rounded-lg items-center"
-        >
-          <Text className="text-white font-bold">Fechar</Text>
-        </Pressable>
-
-      </Box>
-    )}
-
-  </Box>
-</Modal>
-
+              {/* FECHAR */}
+              <Pressable
+                onPress={closePhoto}
+                className="bg-red-600 mt-4 py-3 rounded-lg items-center"
+              >
+                <Text className="text-white font-bold">Fechar</Text>
+              </Pressable>
+            </Box>
+          )}
+        </Box>
+      </Modal>
     </Box>
   );
 }

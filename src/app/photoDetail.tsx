@@ -1,6 +1,6 @@
 import React from "react";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import { usePhotoDetailViewModel } from "../viewmodel/PhotoDetailViewModel";
+import { usePhotoDetailViewModel } from "../viewmodel/usePhotoDetailViewModel";
 import { useRouter, useLocalSearchParams } from "expo-router";
 
 import { Box } from "@/components/ui/box";
@@ -19,7 +19,7 @@ export default function PhotoDetailScreen() {
     timestamp: timestamp ? parseInt(timestamp as string, 10) : Date.now(),
   };
 
-  const { photo } = usePhotoDetailViewModel(initialPhoto);
+  const { state: { photo } } = usePhotoDetailViewModel(initialPhoto);
 
   const formatDate = (timestamp: number) => {
     const date = new Date(timestamp);
